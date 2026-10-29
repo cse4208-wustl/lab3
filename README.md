@@ -51,18 +51,18 @@ Some details of this lab are intentionally somewhat under-specified. When that h
 
 1. Add a `sort()` method to `CardSet` if you did not already do so in the previous lab, or revise it as needed if you did, so that it calls [`std::sort`](https://en.cppreference.com/w/cpp/algorithm/sort).
 
-   Refactor `play()` in both `PinochleGame` and `HoldEmGame` to use the new iterators and the `sort()` wrapper method. Do the same for `holdem_hand_evaluation` and `suit_independent_evaluation`.
+   Refactor `play()` in both `PinochleGame` and `HoldEmGame` to use the new iterators and the `sort()` wrapper method of CardSet (instead of using `vector<Card<R, S> >`, use `CardSet<R, S>`). Do the same for `holdem_hand_evaluation` and `suit_independent_evaluation`.
 
    **At this point, build and run your code and verify that it produces the same results as in Lab 2.**
 
-1. Add type specifiers for the card type, suit type, rank type, and iterator type in the `public` portion of your `CardSet` class template declaration, for example:
+1. Add type aliases for the card type and iterator type in the `public` portion of your `CardSet` class template declaration, for example:
 
    ```cpp
-   typedef Card<S, R> card_type;
-   typedef typename std::vector<Card<S, R>>::iterator iter;
+    using card_type = Card<R,S>;
+    using const_iter = typename std::vector<card_type>::const_iterator;
    // ...
    ```
-
+   Update your code to use these new type specifiers, where appropriate.
 1. Move the `collect` method from the `Deck` class template up into the `CardSet` class template, and rewrite it to use [`std::move`](https://en.cppreference.com/w/cpp/algorithm/move) from the STL algorithms library.
 
    Consider using a `std::back_inserter`. Keep in mind that the container you move from is still non-empty after the call to `std::move`, so it must be cleared explicitly.
