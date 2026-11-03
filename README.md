@@ -107,7 +107,7 @@ Some details of this lab are intentionally somewhat under-specified. When that h
 
 ### The Go Fish Game
 
-1. Create a new C++ header and source file, and in them declare and define a class template called `GoFishGame` with three type parameters: the suit type, the rank type, and the deck type. These should default to `Suit`, `HoldEmRank`, and `HoldEmDeck`, respectively, since Go Fish can be played with many kinds of decks.
+1. Create a new C++ header and source file, and in them declare and define a class template called `GoFishGame`, derived from `Game`, with three type parameters: the suit type, the rank type, and the deck type. These should default to `Suit`, `HoldEmRank`, and `HoldEmDeck`, respectively, since Go Fish can be played with many kinds of decks.
 
    Public members should include:
 
@@ -138,7 +138,9 @@ Some details of this lab are intentionally somewhat under-specified. When that h
 
    After moving the four-of-a-kind into the player's books, return `true`.
 
-1. In `GoFishGame`, declare and define a protected `turn` method that implements a single player's turn. It should take a player number and return a `bool` indicating whether it is still that player's turn.
+4. In `GoFishGame`, declare and define a protected `turn` method that implements a single player's turn. It should take a player number and return a `bool` indicating whether it is still that player's turn.  
+  
+    During their turn, a player will ask for a specific card rank from another player. If that player has that card rank, they must surrender all cards of that rank to the player who requested it. Otherwise, the player will draw a top card from the deck. In either case, if the player whose turn it is gets the card they wanted, the method should return `true` (meaning this player will get to take another turn).
 
    The method should use `std::cout` and `std::cin` to print the players' hands and books, and then prompt the user for a card rank to ask for and a player to ask. Repeat the prompt until the user provides a valid rank (the rank of a card in the current player's hand) and a valid player number (a player in the game).
 
@@ -151,8 +153,8 @@ Some details of this lab are intentionally somewhat under-specified. When that h
 
    If the request fails, the player must "go fish" by drawing a card from the deck into their hand:
 
-   - If the deck is empty, move all of the current player's cards into the deck and remove the player from the game. Print a message to `std::cout` saying so, record in the game object that this player takes no more turns, and return `false`.
-   - Otherwise, return `true` if the drawn card has the rank the player asked for, or `false` if it does not.
+   - If the deck is empty, the player whose turn it is should return the cards in their hand to the deck. That player is then removed from the game and a message to that effect should be printed to std::cout. The GoFishGame object should have an indication that this player will not take any more turns. The method should then return `false`. 
+   - If the player drew a card from the deck and that card was of the rank that the player requested, the method should repeatedly call collect_books (until there are no more books to collect) and return `true`. Otherwise, return `false`.
 
 1. Implement the `deal` method of `GoFishGame`. Shuffle the deck and deal one card at a time to each player until every player has the right number of cards: seven cards each with two players, or five cards each with more than two players.
 
